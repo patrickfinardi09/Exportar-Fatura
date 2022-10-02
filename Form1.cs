@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -15,10 +16,7 @@ namespace exportar_fatura
 
         private void LogText(string message)
         {
-            if (richTextBox1.Text == "")
-                richTextBox1.Text += message;
-            else
-                richTextBox1.Text += "\n" + message; 
+            richTextBox1.Text += message + "\n";
         }
 
         private string GetHTMLFilePath()
@@ -134,7 +132,13 @@ namespace exportar_fatura
             var tableBody = GetTableBody(doc);
 
             HtmlNodeCollection tableRows = tableBody.ChildNodes;
+
             var lastDate = DateTime.Now;
+
+            var finalResponse = string.Empty;
+
+            if (checkBox1.Checked)
+                finalResponse += GetFixedAccountsFile();
 
             foreach (var row in tableRows)
             {
@@ -173,9 +177,15 @@ namespace exportar_fatura
                             }
                         }
                     }
-                    LogText($"{date}\t{desc} {parcels}\t{value}");
+                    finalResponse += $"{date}\t{desc} {parcels}\t{value}\n";
                 }
             }
+            LogText(finalResponse);
+        }
+
+        private string GetFixedAccountsFile()
+        {
+            return File.ReadAllText("ContasFixas.txt") + "\n";
         }
     }
 }
