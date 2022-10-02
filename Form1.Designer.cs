@@ -28,90 +28,85 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.txtPDFFile = new System.Windows.Forms.TextBox();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
+            this.txtResult = new System.Windows.Forms.RichTextBox();
+            this.chkNextMonth = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtPDFFile
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 34);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(540, 22);
-            this.textBox1.TabIndex = 0;
+            this.txtPDFFile.Location = new System.Drawing.Point(9, 28);
+            this.txtPDFFile.Name = "txtPDFFile";
+            this.txtPDFFile.Size = new System.Drawing.Size(406, 20);
+            this.txtPDFFile.TabIndex = 0;
             // 
-            // button1
+            // btnSearch
             // 
-            this.button1.Location = new System.Drawing.Point(563, 31);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 28);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Buscar";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnSearch.Location = new System.Drawing.Point(422, 27);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "Buscar";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // btnExport
             // 
-            this.button2.Location = new System.Drawing.Point(563, 86);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 28);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Exportar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnExport.Location = new System.Drawing.Point(422, 70);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(75, 23);
+            this.btnExport.TabIndex = 2;
+            this.btnExport.Text = "Exportar";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.button2_Click);
             // 
-            // richTextBox1
+            // txtResult
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 121);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(651, 419);
-            this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
+            this.txtResult.Location = new System.Drawing.Point(9, 98);
+            this.txtResult.Name = "txtResult";
+            this.txtResult.ReadOnly = true;
+            this.txtResult.Size = new System.Drawing.Size(489, 341);
+            this.txtResult.TabIndex = 3;
+            this.txtResult.Text = "";
             // 
-            // checkBox1
+            // chkNextMonth
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.ForeColor = System.Drawing.Color.White;
-            this.checkBox1.Location = new System.Drawing.Point(12, 90);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(150, 21);
-            this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "Gerar próximo mês";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkNextMonth.AutoSize = true;
+            this.chkNextMonth.ForeColor = System.Drawing.Color.White;
+            this.chkNextMonth.Location = new System.Drawing.Point(9, 73);
+            this.chkNextMonth.Name = "chkNextMonth";
+            this.chkNextMonth.Size = new System.Drawing.Size(113, 17);
+            this.chkNextMonth.TabIndex = 4;
+            this.chkNextMonth.Text = "Gerar próximo mês";
+            this.chkNextMonth.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Location = new System.Drawing.Point(9, 7);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(121, 17);
+            this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 8;
             this.label2.Text = "Arquivo de fatura:";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(681, 553);
+            this.ClientSize = new System.Drawing.Size(511, 449);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.chkNextMonth);
+            this.Controls.Add(this.txtResult);
+            this.Controls.Add(this.btnExport);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.txtPDFFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -123,11 +118,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox txtPDFFile;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.RichTextBox txtResult;
+        private System.Windows.Forms.CheckBox chkNextMonth;
         private System.Windows.Forms.Label label2;
     }
 }

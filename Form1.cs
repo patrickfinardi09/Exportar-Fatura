@@ -1,8 +1,6 @@
 ﻿using exportar_fatura.Controllers;
-using HtmlAgilityPack;
 using System;
-using System.IO;
-using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace exportar_fatura
@@ -19,65 +17,32 @@ namespace exportar_fatura
 
         private void button1_Click(object sender, EventArgs e)
         {
-            textBox1.Text = GetHTMLFilePath();
+            txtPDFFile.Text = agilityController.
+                GetHTMLFilePath(txtPDFFile as TextBox);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == "")
+            if (txtPDFFile.Text == "")
                 return;
 
-            var doc = GetHTMLDocument(textBox1.Text);
+            txtResult.Text = string.Empty;
 
-            var tableBody = GetTableBody(doc);
-
-            HtmlNodeCollection tableRows = tableBody.ChildNodes;
-
+            var doc = agilityController.GetHTMLDocument(txtPDFFile.Text);
+            var tableBody = agilityController.GetTableBody(doc);
+            var tableRows = tableBody.ChildNodes;
             var lastDate = DateTime.Now;
+            var finalResponse = new List<Despesa>();
 
-            var finalResponse = string.Empty;
+            if (chkNextMonth.Checked)
+                finalResponse.AddRange(UtilsController.GetFixedExpensesFromFile());
 
-            if (checkBox1.Checked)
-                finalResponse += GetFixedAccountsFile();
+            finalResponse.AddRange(agilityController.RunThroughtTableRows(tableRows, chkNextMonth.Checked));
 
-            foreach (var row in tableRows)
+            foreach (var despesa in finalResponse)
             {
-                if (row.NodeType == HtmlNodeType.Element &&
-                    !row.InnerText.Contains("PAGTO. POR DEB EM C/C") &&
-                    !row.InnerText.Contains("SALDO ANTERIOR"))
-                {
-                    var i = 0;
-                    HtmlNodeCollection rowCells = row.ChildNodes;
-                    string date, desc, value, parcels = string.Empty;
-                    foreach (var cell in rowCells)
-                    {
-                        if (cell.NodeType == HtmlNodeType.Element && cell.Name == "td")
-                        {
-                            i++;
-                            switch (i)
-                            {
-                                case 1:
-                                    date = GenerateDateColumn(cell);
-                                    if (date == null)
-                                        date = lastDate.ToString("dd/MM/yyyy");
-                                    lastDate = DateTime.Parse(date);
-                                    break;
-                                case 2:
-                                    desc = GenerateDescriptionColumn(cell);
-                                    break;
-                                case 6:
-                                    value = GenerateValueColumn(cell);
-                                    parcels = GenerateParcels(cell);
-                                    break;
-                                default:
-                                    continue;
-                            }
-                        }
-                    }
-                    finalResponse += $"{date}\t{desc} {parcels}\t{value}\n";
-                }
+                UtilsController.LogText(despesa.ToString(), txtResult);
             }
-            LogText(finalResponse);
         }
     }
 }

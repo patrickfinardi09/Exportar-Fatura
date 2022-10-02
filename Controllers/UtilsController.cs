@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace exportar_fatura.Controllers
@@ -41,9 +43,21 @@ namespace exportar_fatura.Controllers
             }
         }
 
-        private static string GetFixedAccountsFile()
+        public static List<Despesa> GetFixedExpensesFromFile()
         {
-            return File.ReadAllText("DespesasFixas.txt") + "\n";
+            var tempList = new List<Despesa>();
+            var file = File.ReadAllLines("DespesasFixas.txt");
+            foreach (var line in file)
+            {
+                var split = line.Split('\t');
+                tempList.Add(new Despesa()
+                {
+                    Data = DateTime.Parse(split[0]),
+                    Descricao = split[1],
+                    Valor = Double.Parse(split[2])
+                });
+            }
+            return tempList;
         }
     }
 }

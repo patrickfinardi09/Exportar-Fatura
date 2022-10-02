@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
@@ -8,7 +9,7 @@ namespace exportar_fatura.Controllers
 {
     class AgilityController
     {
-        private string GetHTMLFilePath(TextBox textBox)
+        public string GetHTMLFilePath(TextBox textBox)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -25,50 +26,96 @@ namespace exportar_fatura.Controllers
             return textBox.Text;
         }
 
-        private HtmlDocument GetHTMLDocument(string path)
+        public HtmlDocument GetHTMLDocument(string path)
         {
             var doc = new HtmlDocument();
             doc.Load(path);
             return doc;
         }
 
-        private HtmlNode GetTableBody(HtmlDocument doc)
+        public HtmlNode GetTableBody(HtmlDocument doc)
         {
             return doc.DocumentNode.SelectSingleNode("//tbody");
         }
 
-        private string GenerateDateColumn(HtmlNode cell)
+        public List<Despesa> RunThroughtTableRows(HtmlNodeCollection tableRows, bool nextMonth)
+        {
+            var tempList = new List<Despesa>();
+            foreach (var row in tableRows)
+            {
+                if (row.NodeType == HtmlNodeType.Element &&
+                    !row.InnerText.Contains("PAGTO. POR DEB EM C/C") &&
+                    !row.InnerText.Contains("SALDO ANTERIOR"))
+                {
+                    var tempDespesa = new Despesa();
+                    var rowCells = row.Descendants("td").ToList();
+
+                    tempDespesa.ParcelaAtual = GenerateActualParcel(rowCells[7]);
+                    tempDespesa.Parcelas = GenerateParcels(rowCells[7]);
+                    tempDespesa.Valor = GenerateValueColumn(rowCells[7]);
+                    tempDespesa.Data = GenerateDateColumn(rowCells[0]);
+                    tempDespesa.Descricao = GenerateDescriptionColumn(rowCells[1]);
+
+                    if (nextMonth)
+                    {
+                        if (!row.InnerText.Contains("Parcela"))
+                            continue;
+                        
+                        if (tempDespesa.ParcelaAtual == tempDespesa.Parcelas)
+                            continue;
+
+                        tempDespesa.ParcelaAtual = tempDespesa.ParcelaAtual + 1;
+                    }
+                    tempList.Add(tempDespesa);
+                }
+            }
+            return tempList;
+        }
+
+        public DateTime GenerateDateColumn(HtmlNode cell)
         {
             var cellSpans = cell.Descendants("span").ToList();
             if (cellSpans.Count <= 0 || cellSpans == null)
-                return null;
+                return DateTime.Now;
             var month = UtilsController.GetMonthNumberByName(cellSpans[1].InnerText);
-            return DateTime.Parse($"{cellSpans[0].InnerText}/{month}/{DateTime.Now.Year}").ToString("dd/MM/yyyy");
+            return DateTime.Parse($"{cellSpans[0].InnerText}/{month}/{DateTime.Now.Year}");
         }
 
-        private string GenerateValueColumn(HtmlNode cell)
+        public double GenerateValueColumn(HtmlNode cell)
         {
             var cellSpans = cell.Descendants("span").ToList();
             if (cellSpans.Count <= 0 || cellSpans == null)
-                return null;
+                return 0.0;
             return cellSpans[0].InnerText.Contains("Parcela") ?
-                cellSpans[0].InnerText.Substring(13) :
-                cellSpans[0].InnerText;
+                double.Parse(cellSpans[0].InnerText.Substring(13)) :
+                double.Parse(cellSpans[0].InnerText);
         }
 
-        private string GenerateParcels(HtmlNode cell)
+        public int GenerateParcels(HtmlNode cell)
         {
             var cellSpans = cell.Descendants("span").ToList();
             if (cellSpans.Count <= 0 || cellSpans == null)
-                return null;
+                return 0;
 
             if (!cellSpans[0].InnerText.Contains("Parcela"))
-                return string.Empty;
+                return 0;
 
-            return cellSpans[0].InnerText.Substring(8, 5);
+            return int.Parse(cellSpans[0].InnerText.Substring(11, 2));
         }
 
-        private string GenerateDescriptionColumn(HtmlNode cell)
+        public int GenerateActualParcel(HtmlNode cell)
+        {
+            var cellSpans = cell.Descendants("span").ToList();
+            if (cellSpans.Count <= 0 || cellSpans == null)
+                return 0;
+
+            if (!cellSpans[0].InnerText.Contains("Parcela"))
+                return 0;
+
+            return int.Parse(cellSpans[0].InnerText.Substring(8, 2));
+        }
+
+        public string GenerateDescriptionColumn(HtmlNode cell)
         {
             var cellSpans = cell.Descendants("span").ToList();
             if (cellSpans.Count <= 0 || cellSpans == null)
