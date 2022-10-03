@@ -31,7 +31,6 @@ namespace exportar_fatura
             var doc = agilityController.GetHTMLDocument(txtPDFFile.Text);
             var tableBody = agilityController.GetTableBody(doc);
             var tableRows = tableBody.ChildNodes;
-            var lastDate = DateTime.Now;
             var finalResponse = new List<Despesa>();
 
             if (chkNextMonth.Checked)
