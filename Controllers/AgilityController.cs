@@ -9,6 +9,8 @@ namespace exportar_fatura.Controllers
 {
     class AgilityController
     {
+        DateTime LastDate;
+
         public string GetHTMLFilePath(TextBox textBox)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
@@ -56,6 +58,8 @@ namespace exportar_fatura.Controllers
                     tempDespesa.Data = GenerateDateColumn(rowCells[0]);
                     tempDespesa.Descricao = GenerateDescriptionColumn(rowCells[1]);
 
+                    LastDate = tempDespesa.Data;
+
                     if (nextMonth)
                     {
                         if (!row.InnerText.Contains("Parcela"))
@@ -76,7 +80,7 @@ namespace exportar_fatura.Controllers
         {
             var cellSpans = cell.Descendants("span").ToList();
             if (cellSpans.Count <= 0 || cellSpans == null)
-                return DateTime.Now;
+                return LastDate;
             var month = UtilsController.GetMonthNumberByName(cellSpans[1].InnerText);
             return DateTime.Parse($"{cellSpans[0].InnerText}/{month}/{DateTime.Now.Year}");
         }

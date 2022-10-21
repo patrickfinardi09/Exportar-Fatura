@@ -1,6 +1,8 @@
 ﻿using exportar_fatura.Controllers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace exportar_fatura
@@ -37,6 +39,7 @@ namespace exportar_fatura
                 finalResponse.AddRange(UtilsController.GetFixedExpensesFromFile());
 
             finalResponse.AddRange(agilityController.RunThroughtTableRows(tableRows, chkNextMonth.Checked));
+            finalResponse = finalResponse.OrderBy(x => x.Data).ToList();
 
             foreach (var despesa in finalResponse)
             {
